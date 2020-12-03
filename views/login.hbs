@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Masuk</title>
+	<link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+	<section>
+		<div class="container">
+			<div class="user singinBx">
+				<div class="imgBx"><img src="/img/bg-01.jpg"></div>
+				<div class="formBx">
+					<form action="/auth/login" method="POST">
+						<h2>Sign In.</h2>
+						<input type="text" name="username" placeholder="Username">
+						<input type="password" name="password" placeholder="Password">
+						<input type="submit" value="Login">
+						{{#if message}}
+						<h4 class="error">{{message}}</h4>
+						{{/if}}
+						<p class="signup">Don't have an account? <a href="/register">Create Account</a></p>
+					</form>
+				</div>
+			</div>
+			<!--<div class="user singupBx">
+				<div class="formBx">
+					<form>
+						<h2>Create An Account</h2>
+						<input type="text" name="" placeholder="Username">
+						<input type="email" name="" placeholder="Email Address">
+						<input type="password" name="" placeholder="Create Password">
+						<input type="password" name="" placeholder="Confirm Password">
+						<input type="submit" name="" value="Create">
+						<p class="signup">Already have an account? <a href="#" onclick="toggleform();">Sign in</a></p>
+					</form>
+				</div>
+				<div class="imgBx"><img src="img/bg-01.jpg"></div>
+			</div>-->
+		</div>
+	</section>
+</body>
+
+</html>
