@@ -1,16 +1,17 @@
-const mysql = require('mysql'); // connect to mysql
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-
+import mysql from 'mysql';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const conn = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PW,
-    database: process.env.DATABASE,
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'todo'
 });
 
-exports.login = async (req, res) => {
+export default class Auth {
+
+    static async login(req, res) {
     try {
         const { username, password } = req.body;
 
@@ -18,7 +19,6 @@ exports.login = async (req, res) => {
             return res.status(400).render('login', {
                 message: 'Please provide username and password'
             })
-            console.log('ANJING LU');
         }
         conn.query('SELECT * FROM user_acc WHERE username = ?', [username], async (error, results) => {
             console.log(results);
@@ -54,15 +54,14 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.register = (req, res) => {
-    console.log(req.body);
+    static async register(req, res) {
 
     const name = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
     const passwordConfirm = req.body.passwordConfirm;
 
-    //const { name, email, password, passwordConfirm} = req.body;
+    //const { name, email, password, passwordConfirm } = req.body;
     // ^ Kemabarannya
 
     conn.query('SELECT email FROM user_acc WHERE email = ?', [email], async (error, results) => {
@@ -79,12 +78,11 @@ exports.register = (req, res) => {
             }
             else if (password !== passwordConfirm) {
                 return res.render('register', {
-                    message: 'PWnya beda'
+                    message: 'password is incorrect'
                 });
             }
     
             let hashedPassword = await bcrypt.hash(password, 8);
-            console.log(hashedPassword);
 
             conn.query('INSERT INTO user_acc SET ?', { username: name, email: email, password: hashedPassword }, (error, results) => {
                 if (error) {
@@ -99,4 +97,5 @@ exports.register = (req, res) => {
             })
         });
 
-};
+    };
+}

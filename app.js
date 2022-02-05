@@ -1,27 +1,29 @@
-const express = require('express'); //Server Framework
-const path = require('path');
-const mysql = require('mysql'); // connect to mysql
-const dotenv = require('dotenv'); // Encryption
-const cookieParser = require('cookie-parser');
+import express from 'express';
+import path from 'path';
+import mysql from 'mysql';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import pages from './routes/pages.js';
+import auth from './routes/auth.js';
 //const cookieParser = require('cookie-parser');
 dotenv.config({ path: './.env' });
 
 const app = express();
 
 const conn = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PW,
-    database: process.env.DATABASE,
+    host     : 'localhost',
+    user     : 'root',
+    password : '',
+    database : 'todo'
 });
 
-//public directory
-const publicDirectory = path.join(__dirname, './public');
-app.use(express.static(publicDirectory));
 
-//Betak data dari URL
+const __dirname = import.meta.url;
+
+//public directory
+app.use(express.static('public'));
+
 app.use(express.urlencoded({ extended: false }));
-// Jadiin JSON
 app.use(express.json());
 //app.use(cookieParser());
 
@@ -32,13 +34,13 @@ conn.connect((err) => {
         console.log('Unable to connect');
     }
     else {
-        console.log('Anjay nyambung');
+        console.log('connected');
     }
 });
 
 //routes
-app.use('/', require('./routes/pages'));
-app.use('/auth', require('./routes/auth'));
+app.use('/', pages);
+app.use('/auth', auth);
 
 //connect to localhost with port of 8080
 app.listen(8080, () => {
